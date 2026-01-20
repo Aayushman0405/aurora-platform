@@ -2,3 +2,4 @@ fastapi
 uvicorn[standard]
 kubernetes
 pydantic
+prometheus-client
