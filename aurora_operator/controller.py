@@ -1,7 +1,7 @@
 import time
 from kubernetes import client, watch
-from operator.training_job import create_training_job
-from operator.status import update_status
+from aurora_operator.training_job import create_training_job
+from aurora_operator.status import update_status
 
 GROUP = "aurora.io"
 VERSION = "v1alpha1"

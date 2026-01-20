@@ -3,7 +3,7 @@ from api.routers import health, platform, storage, cluster
 from fastapi import Request
 from api.metrics import REQUEST_COUNT, REQUEST_LATENCY, router as metrics_router
 import threading
-from operator.controller import run_controller
+from aurora_operator.controller import run_controller
 
 app = FastAPI(
     title="AURORA Control Plane",
@@ -31,5 +31,6 @@ app.include_router(metrics_router)
 
 @app.on_event("startup")
 def start_controller():
+    import threading
     thread = threading.Thread(target=run_controller, daemon=True)
     thread.start()
