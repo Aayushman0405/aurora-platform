@@ -33,5 +33,5 @@ app.include_router(metrics_router)
 def start_controller():
     import threading
     from aurora_operator.controller import run_controller
-    t = threading.Thread(target=run_controller, daemon=true)
+    t = threading.Thread(target=run_controller, daemon=True)
     t.start()
