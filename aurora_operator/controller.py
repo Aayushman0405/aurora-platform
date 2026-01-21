@@ -1,5 +1,4 @@
-import time
-from kubernetes import client, watch
+from kubernetes import client, watch, config
 from aurora_operator.training_job import create_training_job
 from aurora_operator.status import update_status
 
@@ -7,8 +6,14 @@ GROUP = "aurora.io"
 VERSION = "v1alpha1"
 PLURAL = "mltrainingjobs"
 
-
 def run_controller():
+    try:
+        config.load_incluster_config()
+        print("✅ Loaded in-cluster Kubernetes config")
+    except Exception as e:
+        print(f"❌ Failed to load in-cluster config: {e}")
+        return
+
     api = client.CustomObjectsApi()
     w = watch.Watch()
 
@@ -24,11 +29,8 @@ def run_controller():
         obj = event["object"]
         event_type = event["type"]
 
-        name = obj["metadata"]["name"]
-        namespace = obj["metadata"]["namespace"]
-
         if event_type == "ADDED":
-            print(f"📌 New MLTrainingJob detected: {name}")
-
+            print(f"📌 New MLTrainingJob detected: {obj['metadata']['name']}")
             create_training_job(obj)
             update_status(obj, phase="Running")
+
